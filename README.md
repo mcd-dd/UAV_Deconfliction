@@ -33,7 +33,7 @@ Uses:
 
 ---
 
-## 🏗️ System Architecture
+## 🏗️ Directory Structure
 ```
 uav_deconfliction/
 │
@@ -99,35 +99,36 @@ uav_deconfliction/
 
 ### Prerequisites
 - Python ≥ 3.10  
-- ArduPilot SITL (with `sim_vehicle.py` in PATH)  
-- MAVProxy (with `mavproxy.py` in PATH)  
-- DroneKit-Python (`pip install dronekit`)
 
 ### Steps
   ```bash
   # 1. Clone repository
-  git clone https://github.com/your-username/drone-mission-system.git
-  cd drone-mission-system
+  git clone https://github.com/your-username/uav_deconfliction.git
+  cd uav_deconfliction
   
   # 2. Install dependencies
   pip install -r requirements.txt
   
-  # 3. Initialize database
-  cd backend
-  python -m app.database
-  
-  # 4. Run backend server
-  uvicorn app.main:app --reload --port 8000
-  
-  # 5. Run frontend dashboard
-  cd frontend
-  streamlit run streamlit_app.py
-    
-  Then open http://localhost:8501 in your browser.
+  # 3. Run
+  python3 main.py data/1000_drones.xlsx \
+      --primary-id 1001 \
+      --min-distance 10 \
+      --time-window-sec 1 \
+      --interp-step-sec 0.5 \
+      --plot-2d \
+      --plot-4d \
+      --save-4d output.mp4
+ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+| Flag                | Description                          |
+| ------------------- | ------------------------------------ |
+| `--primary-id`      | Primary mission drone                |
+| `--min-distance`    | Safe distance threshold              |
+| `--time-window-sec` | Temporal conflict window (± seconds) |
+| `--interp-step-sec` | Interpolation step size              |
+| `--plot-2d`         | Show 2D visualization                |
+| `--plot-4d`         | Run 4D animation                     |
+| `--save-4d <file>`  | Save 4D animation to video           |
 
-  For hosted application:
-  Backend is on Railway with link: flytbase-assignment.railway.internal
-  Frontend is on Streamli with link: https://flytbase-assignment-cpcawzj2phhpbfnm5o7k59.streamlit.app/
   ```
   ---
 
