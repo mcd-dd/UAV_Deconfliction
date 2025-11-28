@@ -1,7 +1,8 @@
-# 🛰️ Drone Survey & Mission Management System
+# 🛰️ UAV Strategic Deconfliction System
+Modular Python Project for Spatial + Temporal Drone Conflict Detection
+This project implements a strategic pre-flight deconfliction engine for drone (UAV) missions. It ingests drone waypoint data, performs high-performance spatial and temporal conflict checks, interpolates trajectories for smoother detection, and includes visualization tools (2D + 4D animation).
 
-An integrated **mission planning, simulation, and control platform** for multi-drone survey operations — featuring **mission scheduling, real-time telemetry visualization**, and **SITL-based flight simulation**.
-
+The system is designed for scalable, modular analysis of hundreds to thousands of drones.
 ---
 
 ## 🚀 Features
