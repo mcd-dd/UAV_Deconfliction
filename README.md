@@ -30,3 +30,36 @@ uav_deconfliction/
 │
 └─ tests/
     └─ test_conflict_engine.py
+
+🚀 Features
+✔ Data Ingestion
+
+Reads Excel or CSV waypoint data
+
+Validates required columns
+
+Normalizes timestamps
+
+Converts numeric fields
+
+✔ Conflict Engine (Optimized)
+
+Uses:
+
+Trajectory interpolation
+
+KD-Tree spatial pruning (scipy.cKDTree)
+
+Windowed temporal checks
+
+3D distance computation (horizontal + altitude)
+
+✔ Visualization
+
+2D map plot: trajectories + conflict highlights
+
+2D time-altitude plot
+
+4D animation (3D + time), with conflict points in red
+
+Optional MP4 export
