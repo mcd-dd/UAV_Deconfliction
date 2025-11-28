@@ -108,6 +108,25 @@ uav_deconfliction/
 |    1️⃣1️⃣     | **Render 4D animation (3D + time)**                         | `visualization.plot_4d.animate_4d()`           |
 |    1️⃣2️⃣     | **Export mission report (optional)**                        | `export.save_report()`                         |
 
+---
+
+### 📋 User Workflow
+
+| 🧩 **Step** | 🪶 **Action**                                                          | 🔗 **Module / Entry Point**      |
+| ----------- | ---------------------------------------------------------------------- | -------------------------------- |
+| **1️⃣**      | Launch the Deconfliction System                                        | `main.py`                        |
+| **2️⃣**      | Load drone dataset (Excel/CSV with waypoints)                          | `ingestion/data_loader.py`       |
+| **3️⃣**      | System validates data (timestamp format, lat/lon, altitude, DroneID)   | `ingestion/validator.py`         |
+| **4️⃣**      | Enter *Primary Drone ID* for mission analysis                          | Interactive Prompt → `input()`   |
+| **5️⃣**      | System extracts primary and surrounding drone trajectories             | `engine/deconfliction_engine.py` |
+| **6️⃣**      | Perform **Spatial Conflict Check** (KD-Tree pruning + distance checks) | `spatial/spatial_check.py`       |
+| **7️⃣**      | Perform **Temporal Conflict Check** (Δt window + proximity)            | `temporal/temporal_check.py`     |
+| **8️⃣**      | Display conflict summary (first N spatial + temporal collisions)       | Printed console output           |
+| **9️⃣**      | Optionally view **2D visualization** (map + altitude timeline)         | `visualization/plot_2d.py`       |
+| **🔟**      | Optionally render **4D animation** (3D + time)                         | `visualization/plot_4d.py`       |
+| **1️⃣1️⃣**    | If user enters `quit`, exit interactive mode                           | Interactive Prompt               |
+| **1️⃣2️⃣**    | System shuts down gracefully                                           | `main.py`                        |
+
 ### 🧱 Technologies Used
 - Python 3.10+
 - MatPlotLib
