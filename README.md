@@ -25,12 +25,6 @@ Uses:
 - 4D animation (3D + time), with conflict points in red.
 - Optional MP4 export
 
-### 🧠 Safety & Adaptability
-- **Autonomous Return-to-Home (RTH)** and safe landing on mission completion or abort.
-- Automatic synchronization between Mission and Drone states:  
-  `available → in_mission → completed / aborted`
-- Modular backend design — compatible with **SITL or real drones** via MAVLink.
-
 ---
 
 ## 🏗️ Directory Structure
@@ -57,41 +51,6 @@ uav_deconfliction/
 └─ tests/
     └─ test_conflict_engine.py
 ```
-
----
-
-## ⚙️ Core Components**
-
-### 1️⃣ Backend (FastAPI)
-- Provides RESTful endpoints for:
-  - `/drones`, `/surveys`, `/flightpaths`, `/waypoints`, `/missions`, `/telemetry`
-- Manages mission lifecycle via:
-  
-  POST /missions/start → Launch mission
-  POST /missions/pause → Pause mission
-  POST /missions/resume → Resume mission
-  POST /missions/abort → Abort mission safely
-  POST /missions/complete_by_drone → Mark mission complete
-
-- Integrates with **DroneKit** for MAVLink-based UAV control.
-- Launches **SITL + MAVProxy** subprocesses per mission with unique port assignments.
-
-### 2️⃣ Mission Runner
-- Threaded controller per drone:
-  - Connection retry and timeout logic.
-  - Arming, takeoff, waypoint traversal.
-  - Real-time telemetry streaming.
-  - Return-to-home and auto-landing behavior.
-- Maintains mission state integrity:  
-  `planned → in_progress → completed / aborted`
-
-### 3️⃣ Frontend (Streamlit)
-- Unified UI with four main dashboards:
-- 🛰 **Mission Planner** — Create and assign surveys, paths, and drones  
-- 🚁 **Fleet Visualization** — Monitor drone availability and battery  
-- 📡 **Mission Monitoring** — Real-time telemetry + 3D visualization  
-- 📊 **Survey Analytics Portal** — Summarized reports and charts
-- Uses **PyDeck (Mapbox)** for 3D visualization and **Folium** for waypoint editing.
 
 ---
 
@@ -130,96 +89,27 @@ uav_deconfliction/
 | `--save-4d <file>`  | Save 4D animation to video           |
 
   ```
-  ---
-
-## 🕹 Usage Guide
-
-### 🧭 Mission Planning
-
-1. Create and manage **drones**, **surveys**, **flight paths**, and **waypoints** using the interactive Streamlit dashboard.  
-2. Use **Folium maps** for waypoint definition and spatial visualization.  
-3. Assign **Flight Paths** to specific Drones for mission scheduling and management.  
-
 ---
 
-### 📡 Mission Execution
+### 📋 System Workflow
 
-1. Open the **📡 Mission Monitoring** tab from the dashboard.  
-2. Start missions for selected drones and monitor **position**, **progress**, and **battery** in real time.  
-3. Pause, resume, or abort missions as needed during flight.  
-4. Upon completion, drones **automatically return home** for safe landing.  
-
----
-
-## 🔒 Safety & Fault Tolerance
-
-### 1️⃣ Collision Avoidance System
-
-Real-time proximity detection prevents drone collisions.  
-If two drones approach within a **10 m safety radius**, automatic **pause** is triggered for involved drones.  
-Alerts are logged, and optional dashboard notifications are generated.  
-
-**In-flight safety layers:**
-- 🛫 **Pre-Takeoff Check** — Ensures clear airspace before arming.  
-- ✈️ **Dynamic Altitude Offsets** — Auto-adjusts (+5 m) when another drone is nearby.  
-- 🛬 **Safe Landing Queue** — Sequential descent to prevent simultaneous landings.  
-
----
-
-### 2️⃣ State Safety
-
-Automatic drone-state reset (`available`) occurs after mission completion or abort.  
-The backend ensures no concurrent missions are assigned to the same drone.  
-
----
-
-### 3️⃣ Auto Recovery
-
-On backend startup, any drone stuck in the `in_mission` state is **automatically reset**.  
-This guarantees reliability and mission continuity after server restarts or system failures.  
-
----
-
-### 4️⃣ Connection Handling
-
-`MissionController` retries **SITL/MAVLink** connections up to **5 times**.  
-Connection failures are handled gracefully without disrupting other missions.  
-
----
-
-### 5️⃣ Telemetry Reliability
-
-Continuous telemetry streams provide real-time updates for **GPS**, **altitude**, **battery**, **progress**, and **ETA**.  
-All errors are logged safely, ensuring ongoing mission stability.  
-
----
-
-## 🔄 Adaptability
-
-### 🔁 SITL → Real Drone Transition
-- SITL → Real Drone Transition:
-  Replace SITL connection (tcp:127.0.0.1:5760) with your drone’s MAVLink UDP endpoint (udp:192.168.x.x:14550).
-- Extensible Control Logic:
-  Extend MissionController for swarm coordination, AI route re-planning, or safety analytics.
-- API-First Design:
-  Compatible with external ground stations or dashboards.
-
-### 📋 Example Workflow
-
-| 🧩 Step | 🪶 Action | 🔗 API / Module |
-|:-------:|-----------|----------------|
-| 1️⃣ | Add drone to system | `/drones` |
-| 2️⃣ | Define survey + flight path | `/surveys`, `/flightpaths` |
-| 3️⃣ | Add waypoints | `/flightpaths/{id}/waypoints` |
-| 4️⃣ | Assign mission | `/missions/assign` |
-| 5️⃣ | Start mission | `/missions/start` |
-| 6️⃣ | Track progress | `/telemetry` |
-| 7️⃣ | Complete mission | `/missions/complete_by_drone` |
+| 🧩 **Step** | 🛠️ **Action**                                               | 🔗 **Module / Function**                       |
+| :---------: | ----------------------------------------------------------- | ---------------------------------------------- |
+|     1️⃣      | **Ingest dataset** (Excel → DataFrame)                      | `data_ingestion.load_dataset()`                |
+|     2️⃣      | **Normalize & validate columns**                            | `data_ingestion.validate_input_df()`           |
+|     3️⃣      | **Interpolate trajectories (optional)**                     | `spatial_engine.interpolate_trajectory()`      |
+|     4️⃣      | **Build KD-Tree index for all non-primary drones**          | `spatial_engine.build_spatial_index()`         |
+|     5️⃣      | **Perform fast spatial candidate pruning**                  | `spatial_engine.spatial_candidates_kdtree()`   |
+|     6️⃣      | **Compute precise 3D distances**                            | `spatial_engine.compute_3d_distance()`         |
+|     7️⃣      | **Detect spatial conflicts**                                | `spatial_engine.spatial_check()`               |
+|     8️⃣      | **Run temporal window scan (± time_window_sec)**            | `temporal_engine.temporal_check()`             |
+|     9️⃣      | **Generate mission status** (“clear” / “conflict detected”) | `conflict_engine.query_mission_status()`       |
+|     🔟      | **Display 2D trajectory + conflict map**                    | `visualization.plot_2d.plot_primary_mission()` |
+|    1️⃣1️⃣     | **Render 4D animation (3D + time)**                         | `visualization.plot_4d.animate_4d()`           |
+|    1️⃣2️⃣     | **Export mission report (optional)**                        | `export.save_report()`                         |
 
 ### 🧱 Technologies Used
 - Python 3.10+
-- FastAPI (Backend REST API)
-- Streamlit (Frontend Dashboard)
-- DroneKit-Python (MAVLink control)
-- ArduPilot SITL (Simulation)
-    • 
+- MatPlotLib
+- Pandas
+- SciPy KDTree
