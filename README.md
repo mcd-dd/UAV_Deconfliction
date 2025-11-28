@@ -39,3 +39,33 @@ Windowed temporal checks
 4D animation (3D + time), with conflict points in red
 
 Optional MP4 export
+
+
+📦 Installation
+
+Install dependencies:
+
+pip install -r requirements.txt
+
+
+or manually:
+
+pip install pandas numpy geopy matplotlib scipy openpyxl
+
+
+📥 Input Format
+
+The input Excel file must contain columns:
+
+DroneID | Time | Latitude | Longitude | Altitude
+
+
+Example:
+
+DroneID	Time	Latitude	Longitude	Altitude
+1001	2025-05-24 10:00:00	37.12	-122.01	100
+251	2025-05-24 10:00:00	37.11	-122.02	98
+
+
+
+
