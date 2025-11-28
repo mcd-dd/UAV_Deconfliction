@@ -6,21 +6,24 @@ The system is designed for scalable, modular analysis of hundreds to thousands o
 
 ## 🚀 Features
 
-### 🧭 Mission Planning
-- Create and manage **drones, surveys, flight paths, and waypoints** via an interactive Streamlit dashboard.
-- Use **Folium maps** for intuitive waypoint placement.
-- Assign flight paths to specific drones for **mission scheduling**.
+### 🧭 Data Ingestion
+- Reads Excel or CSV waypoint data.
+- Validates required columns.
+- Normalizes timestamps.
+- Converts numeric fields
 
-### 📡 Mission Execution
-- Launch **SITL (Software-In-The-Loop)** drone simulations automatically per mission.
-- Execute missions with full lifecycle control:
-  - **Start**, **Pause**, **Resume**, **Abort**, **Complete**
-- Supports **multiple concurrent drones** via isolated MAVLink and TCP/UDP ports.
+### 📡 Conflict Engine
+Uses:
+- Trajectory interpolation
+- KD-Tree spatial pruning (scipy.cKDTree)
+- Windowed temporal checks
+- 3D distance computation (horizontal + altitude)
 
-### 🌍 Real-Time Monitoring
-- Live telemetry streaming: **position**, **altitude**, **battery**, **progress**, **ETA**.
-- **3D visualization** using PyDeck (Mapbox) with dynamic path rendering.
-- Integrated **Google Maps Street View** for real-world ground-level context.
+### 🌍 Visualization
+- 2D map plot: trajectories + conflict highlights.
+- 2D time-altitude plot.
+- 4D animation (3D + time), with conflict points in red.
+- Optional MP4 export
 
 ### 🧠 Safety & Adaptability
 - **Autonomous Return-to-Home (RTH)** and safe landing on mission completion or abort.
