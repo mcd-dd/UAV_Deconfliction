@@ -1,5 +1,4 @@
 # 🛰️ UAV Strategic Deconfliction System
-Modular Python Project for Spatial + Temporal Drone Conflict Detection
 This project implements a strategic pre-flight deconfliction engine for drone (UAV) missions. It ingests drone waypoint data, performs high-performance spatial and temporal conflict checks, interpolates trajectories for smoother detection, and includes visualization tools (2D + 4D animation).
 
 The system is designed for scalable, modular analysis of hundreds to thousands of drones.
@@ -33,21 +32,27 @@ The system is designed for scalable, modular analysis of hundreds to thousands o
 
 ## 🏗️ System Architecture
 ```
-├── backend/
-│ ├── app/
-│ │ ├── main.py # FastAPI app and API endpoints
-│ │ ├── mission_runner.py # MissionController (drone control logic)
-│ │ ├── models.py # SQLModel ORM definitions
-│ │ ├── crud.py # CRUD operations for all entities
-│ │ ├── database.py # DB engine and session configuration
-│ │ └── init.py
-│ └── mission_planner.db # SQLite database
+uav_deconfliction/
 │
-├── frontend/
-│ ├── streamlit_app.py # Streamlit dashboard (Planner, Monitoring, Analytics)
+├─ main.py
+├─ requirements.txt
+├─ README.md
+├─ docs/
+│   └─ reflection_justification.md
 │
-├── README.md
-└── requirements.txt
+├─ src/
+│   ├─ data_ingestion.py
+│   ├─ spatial_check.py
+│   ├─ temporal_check.py
+│   ├─ conflict_engine.py
+│   └─ utils.py
+│
+├─ visualization/
+│   ├─ plot_2d.py
+│   └─ plot_4d.py
+│
+└─ tests/
+    └─ test_conflict_engine.py
 ```
 
 ---
