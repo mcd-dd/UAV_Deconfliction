@@ -91,6 +91,16 @@ uav_deconfliction/
   ```
 ---
 
+📥 **Input Format**
+
+The input Excel file must contain columns:
+
+| DroneID | Time                | Latitude | Longitude | Altitude |
+| ------- | ------------------- | -------- | --------- | -------- |
+| 1001    | 2025-05-24 10:00:00 | 37.12    | -122.01   | 100      |
+| 251     | 2025-05-24 10:00:00 | 37.11    | -122.02   | 98       |
+
+---
 ### 📋 System Workflow
 
 | 🧩 **Step** | 🛠️ **Action**                                               | 🔗 **Module / Function**                       |
