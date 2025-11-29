@@ -76,7 +76,7 @@ uav_deconfliction/
       --interp-step-sec 0.5 \
       --plot-2d \
       --plot-4d \
-      --save-4d output.mp4
+      --save-4d output/4d_animate
  _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 | Flag                | Description                          |
 | ------------------- | ------------------------------------ |
